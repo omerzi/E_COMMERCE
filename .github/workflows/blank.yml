@@ -1,0 +1,37 @@
+#ifndef __SELLER_H
+#define __SELLER_H
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+#pragma warning(disable: 4996)
+
+class Seller
+{
+private :
+	// להוסיף כאן מערך של פידבקים שהוא קיבל
+	char * s_name;
+	char * s_address;
+	char * s_password;
+	// להוסיף כאן מערך של מוצרים שהוא מוכר
+
+public:
+	Seller() = default; // default c'tor
+	Seller(char * name, char * address, char * password); //main c'tor
+	Seller(const Seller & other); //copy c'tor
+	Seller (Seller && other);//move c'tor!
+	~Seller();//d'tor
+public:
+	static const int MIN_PASSWORD_SIZE = 6;
+	inline void setName(const char * name);
+	inline void setAddress(const char * address);
+	inline bool setPassword(const char * password);
+	// להוסיף כאן סטרים של מערך המוצרים ומערך הפידבקים
+	inline const char * getName() const;
+	inline const char * getAddress() const;
+	inline const char * getPassword() const;
+	// להוסיף גטרים של מערך המוצרים ומערך הפידבקים
+};
+
+#endif // __SELLER_H
