@@ -29,13 +29,17 @@ public:
 	void setName(const char * name);
 	void setAddress(Address  address);
 	bool setPassword(const char * password);
-// להוסיף כאן סטרים של מערך עגלת קניות 
 	const char * getName() const;
 	const Address getAddress() const;
 	const char * getPassword() const;
-	Cart getCart();
+	Cart & getCart();
 	void addToCart(Product * product);
 	bool findOrder(int num_of_order);
+	Order ** GetOrderArray() const;
+	void SetOrderLogicSize(const int size);
+	void AddOrderToOrderArr(Order * order);
+	int getOrderlogicsize() const;
+	void printBuyer();
 };
 
 #endif // __BUYER_H

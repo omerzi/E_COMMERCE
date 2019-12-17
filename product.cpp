@@ -1,7 +1,7 @@
 #include "product.h"
 
 const char * Product::ProductCategoryStr[] = { "Kids", "Electronics", "Office","Clothes" };
-int Product::serialCounter = 1;
+//----------------------------------------------------------------------------------------//
 Product::Product(const eProductCategory p_category,const char * name,const int price)
 {
 	//main c'tor
@@ -17,6 +17,7 @@ Product::Product(const Product & other)
 	setName(other.getName());
 	setCategory(other.getCategory());
 	setPrice(other.getPrice());
+	this->p_serial = other.p_serial;
 	this->p_seller = other.p_seller;
 }
 //----------------------------------------------------------------------------------------//
@@ -89,3 +90,18 @@ Seller *Product::Getseller() const
 {
 	return this->p_seller;
 }
+//----------------------------------------------------------------------------------------//
+char * Product::getCategoryByString() const
+{
+	if (p_category == CLOTHES)
+		return "CLOTHES";
+	if (p_category == KIDS)
+		return "KIDS";
+	if (p_category == ELECTRONICS)
+		return "ELECTRONICS";
+	return "OFFICE";
+}
+//----------------------------------------------------------------------------------------//
+int Product::serialCounter = 0;
+//----------------------------------------------------------------------------------------//
+

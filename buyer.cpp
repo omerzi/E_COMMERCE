@@ -78,7 +78,7 @@ const char *Buyer::getPassword()const
 	return b_password;
 }
 //----------------------------------------------------------------------------------------//
-Cart Buyer::getCart()
+Cart & Buyer::getCart()
 {
 	return this->b_cart;
 }
@@ -121,3 +121,69 @@ bool Buyer::findOrder(int num_of_order)
 	}
 	return false;
 }
+//----------------------------------------------------------------------------------------//
+Order ** Buyer::GetOrderArray() const
+{
+	return this->b_order;
+}
+//----------------------------------------------------------------------------------------//
+void Buyer::SetOrderLogicSize(const int size)
+{
+	this->b_order_size = size;
+}
+//----------------------------------------------------------------------------------------//
+void Buyer::AddOrderToOrderArr(Order * order)
+{
+	if (this->b_order == nullptr)
+	{//empty arr
+		this->b_order = new Order*;
+		this->b_order[0] = new Order(*order);
+		this->b_order_size++;
+	}
+	else
+	{ // realloc
+		Order ** new_order_array = new Order *[this->b_order_size + 1];
+		int size = this->b_order_size;
+		for (int i = 0; i < size; i++)
+		{
+			new_order_array[i] = this->b_order[i];
+		}
+		delete[] this->b_order;
+		this->b_order = new_order_array;
+
+		this->b_order[this->b_order_size + 1] = order; //insert new order by ptr
+		this->b_order_size++;
+	}
+
+}
+//----------------------------------------------------------------------------------------//
+int Buyer::getOrderlogicsize() const
+{
+	return this->b_order_size;
+}
+//----------------------------------------------------------------------------------------//
+void Buyer::printBuyer()
+{
+	cout << "- Buyer's Name : " << this->getName() << endl;
+	cout << "- Buyer's Address : " << this->b_address.getState() << ", " << this->b_address.getCity() << ", " << this->b_address.getStreet() << endl;
+	if (this->b_order_size == 0)
+		cout << "- "<< this->getName() << " didn't buy anything yet!" << endl;
+	else
+	{
+		cout << "- These are the products " << this->getName() <<" bought:" << endl;
+		for (int i = 0; i < this->b_order_size; i++)
+		{
+			cout << "order number: " << i << endl;
+			for (int j = 0; j < this->b_order[i]->getNumberOfProd(); i++)
+			{
+				cout << "- Product's Name : " << this->b_order[i]->GetProductsArray()[j]->getName() << endl;
+				cout << "- Product's Price : " << this->b_order[i]->GetProductsArray()[j]->getPrice() << endl;
+				cout << "- Product's serial number : " << this->b_order[i]->GetProductsArray()[j]->getSerial() << endl;
+				cout << "<----------------------------------------->" << endl;
+			}
+		}
+	}
+	cout << "<----------------------------------------->" << endl;
+}
+//----------------------------------------------------------------------------------------//
+

@@ -1,6 +1,6 @@
 #include "cart.h"
 #include "product.h"
-
+#include "seller.h"
 Cart::Cart() 
 {
 	this->c_logicSize = 0;
@@ -60,4 +60,48 @@ void Cart::PrintCart()
 	{
 		cout << "Serial:" << this->c_prouductArr[i]->getSerial() << " " << "Category:" << this->c_prouductArr[i]->getCategory() << " " << "Name:" << this->c_prouductArr[i]->getName() << " " << "Price:" << this->c_prouductArr[i]->getPrice() << endl;
 	}
+}
+//---------------------------------------------------------------------------------------//
+void Cart::PrintCartByCategory(char * pCategory)
+{
+	for (int i = 0; i < this->c_logicSize; i++)
+	{
+		if (strcmp(this->c_prouductArr[i]->getCategoryByString(), pCategory) == 0)
+		{
+			cout << "- Seller's Name : " << this->c_prouductArr[i]->Getseller()->getName() << endl;
+			cout << "- Product's Name : " << this->c_prouductArr[i]->getName() << endl;
+			cout << "- Product's Price : " << this->c_prouductArr[i]->getPrice() << endl;
+			cout << "- Product's serial number : " << this->c_prouductArr[i]->getSerial() << endl;
+			cout << "<----------------------------------------->" << endl;
+		}
+	}
+}
+//---------------------------------------------------------------------------------------//
+void Cart::PrintCartByProductName(char * pName)
+{
+	for (int i = 0; i < this->c_logicSize; i++)
+	{
+		if (strcmp(this->c_prouductArr[i]->getName(), pName) == 0)
+		{
+			cout << "- Seller's Name : " << this->c_prouductArr[i]->Getseller()->getName() << endl;
+			cout << "- Product's Name : " << this->c_prouductArr[i]->getName() << endl;
+			cout << "- Product's Price : " << this->c_prouductArr[i]->getPrice() << endl;
+			cout << "- Product's serial number : " << this->c_prouductArr[i]->getSerial() << endl;
+			cout << "<----------------------------------------->" << endl;
+		}
+	}
+}
+//---------------------------------------------------------------------------------------//
+Product*Cart::getProductBySerial(int serial)
+{
+	bool flag = false;
+	for (int i = 0; i < this->c_logicSize && flag == false; i++)
+	{
+		if (this->c_prouductArr[i]->getSerial() == serial)
+		{
+			return this->c_prouductArr[i];
+		}
+	}
+	if (flag == false)
+		return nullptr; //an indicator for the main that no product has found*/
 }

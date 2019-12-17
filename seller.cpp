@@ -8,7 +8,7 @@ Seller::Seller(const char * name, const char * password, Address &add, Cart & ca
 	this->s_feed_lsize = 0;
 	this->s_feedArr = nullptr;
 	setName(name);
-	setPassword(password); // צריך לבדוק מה עושים אם המתודה תחזיר 0 וצריך להקיש סיסמה מחדש
+	setPassword(password); 
 }
 //----------------------------------------------------------------------------------------//
 Seller::Seller(const Seller & other) : s_address(other.s_address) , s_cart(other.s_cart)
@@ -110,7 +110,7 @@ void Seller::addFeedback(Feedback * feed)
 	}
 }
 //----------------------------------------------------------------------------------------//
-Cart Seller::getCart() 
+Cart & Seller::getCart() 
 {
 	return s_cart;
 }
@@ -121,6 +121,7 @@ void Seller::addProductToSeller(Product * newP)
 	{//empty arr
 		this->s_cart.c_prouductArr = new Product *[this->s_cart.c_phsize];
 		this->s_cart.c_prouductArr[this->s_cart.c_logicSize] = new Product(*newP);
+		this->s_cart.c_prouductArr[this->s_cart.c_logicSize]->setSeller(this);
 		this->s_cart.c_logicSize++;
 	}
 	else
@@ -137,6 +138,42 @@ void Seller::addProductToSeller(Product * newP)
 			this->s_cart.c_prouductArr = new_prod_array;
 		}
 		this->s_cart.c_prouductArr[this->s_cart.c_logicSize] = new Product(*newP); //insert new product by ptr
+		this->s_cart.c_prouductArr[this->s_cart.c_logicSize]->setSeller(this);
 		this->s_cart.c_logicSize++;
+	}
+}
+//----------------------------------------------------------------------------------------//
+void Seller::printSeller()
+{
+	cout << "- Seller's Name : " << this->getName() << endl;
+	cout << "- Seller's Address : " << this->s_address.getState() << ", " << this->s_address.getCity() << ", " << this->s_address.getStreet() << endl;
+	if (this->s_feed_lsize == 0)
+		cout << "- " << this->getName() << " doesn't have any feedback yet" << endl;
+	else
+	{
+		cout << "These are " << this->getName() << " feedbacks:" << endl;
+		for (int i = 0; i < this->s_feed_lsize; i++)
+		{
+			cout << "-By: " << this->s_feedArr[i]->getName() << endl;
+			cout << "-At: " << this->s_feedArr[i]->getDate().getDay() << "\\" << this->s_feedArr[i]->getDate().getMonth() << "\\" << this->s_feedArr[i]->getDate().getYear() << endl;
+			cout << "-Descripton: " << this->s_feedArr[i]->getDescription() << endl;
+			cout << "<----------------------------------------->" << endl;
+		}
+	}
+	if (this->s_cart.c_logicSize == 0)
+	{
+		cout << "- " << this->getName() << " doesn't have any products right now" << endl;
+		cout << "<----------------------------------------->" << endl;
+	}
+	else
+	{
+		cout << "These are" << this->getName() << " products:" << endl;
+		for (int i = 0; i < this->s_cart.c_logicSize; i++)
+		{
+			cout << "- Product's Name : " << this->s_cart.c_prouductArr[i]->getName() << endl;
+			cout << "- Product's Price : " << this->s_cart.c_prouductArr[i]->getPrice() << endl;
+			cout << "- Product's serial number : " << this->s_cart.c_prouductArr[i]->getSerial() << endl;
+			cout << "<----------------------------------------->" << endl;
+		}
 	}
 }

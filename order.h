@@ -11,8 +11,8 @@ class  Order
 private:
 	static int counter;//for o_number
 	int  o_number;
-	Product *o_productArr;
-	int o_numberofP = 0;
+	Product **o_productArr;
+	int o_numberofP;
 	int o_price;
 public:
 	Order(int numberofProduct);
@@ -23,7 +23,10 @@ public:
 	inline void SetPrice(const int price);
 	int GetPriceOfOrder() const;
 	int GetOrderNumber()const;
-	Product *GetProductsArray()const;
+	int getNumberOfProd() const;
+	void setNumberOfProd(const int numberofp);
+	Product **GetProductsArray()const;
+	void setNumberofOrder(const int number);
 	bool SetProductArray();
 };
 #endif // !__ORDER_H

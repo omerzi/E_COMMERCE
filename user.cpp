@@ -1,4 +1,5 @@
 #include "user.h"
+#include "product.h"
 
 User::User()
 {
@@ -140,10 +141,10 @@ Buyer** User::GetBuyerAddress() const
 	 {
 		 if (strcmp(name, this->s_arr[i]->getName()) == 0)
 			 return (this->s_arr[i]);
-	}
+	 }
+	 return nullptr;//seller not found
  }
  //----------------------------------------------------------------------------------------//
-
  Buyer * User::findBuyer(char * name)
  { // finds and return the buyer in the buyer's array
 	 for (int i = 0; i < this->b_logicSizeArr; i++)
@@ -151,5 +152,26 @@ Buyer** User::GetBuyerAddress() const
 		 if (strcmp(name, this->b_arr[i]->getName()) == 0)
 			 return (this->b_arr[i]);
 	 }
+	 return nullptr; //buyer not found
  }
  //----------------------------------------------------------------------------------------//
+ bool User::checkName(char * name, int indicator)
+ { // if indicator = 0 check buyer's name, if indicator = 1 check seller's name
+	 if (indicator == 0)
+	 {
+		 for (int i = 0; i < this->b_logicSizeArr; i++)
+		 {
+			 if (strcmp(this->b_arr[i]->getName(), name) == 0)
+				 return true;
+		 }
+	 }
+	 if (indicator == 1)
+	 {
+		 for (int i = 0; i < this->s_logicSizeArr; i++)
+		 {
+			 if (strcmp(this->s_arr[i]->getName(), name) == 0)
+				 return true;
+		 }
+	 }
+	 return false;
+ }

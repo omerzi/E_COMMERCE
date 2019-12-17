@@ -35,6 +35,7 @@ public:
 	int getSerial() const;
 	void setSeller(Seller * seller);
 	Seller *Getseller()const;
+	char * getCategoryByString() const;
 };
 
 #endif // __PRODUCT_H
