@@ -14,13 +14,14 @@ private:
 	Product **o_productArr;
 	int o_numberofP;
 	int o_price;
+	bool o_isPaid;
 public:
 	Order(int numberofProduct);
 	Order();
 	Order(const Order & other);//copy c'tor
 	~Order();
 public:
-	inline void SetPrice(const int price);
+	void SetPrice(const int price);
 	int GetPriceOfOrder() const;
 	int GetOrderNumber()const;
 	int getNumberOfProd() const;
@@ -28,5 +29,9 @@ public:
 	Product **GetProductsArray()const;
 	void setNumberofOrder(const int number);
 	bool SetProductArray();
+	void setPaymentSatus(bool flag);
+	bool getPaymentSatus();
+	bool checkQuantity(Product * temp);
+
 };
 #endif // !__ORDER_H

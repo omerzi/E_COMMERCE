@@ -82,11 +82,10 @@ Cart & Buyer::getCart()
 {
 	return this->b_cart;
 }
-
 //----------------------------------------------------------------------------------------//
 void Buyer::addToCart(Product * prod)
 {
-	if (this->b_cart.c_prouductArr == nullptr)
+	if (this->b_cart.c_prouductArr == nullptr || this->b_cart.c_logicSize == 0)
 	{//empty arr
 		this->b_cart.c_prouductArr = new Product *[this->b_cart.c_phsize];
 		this->b_cart.c_prouductArr[this->b_cart.c_logicSize] = new Product(*prod);
@@ -111,12 +110,15 @@ void Buyer::addToCart(Product * prod)
 }
 //----------------------------------------------------------------------------------------//
 bool Buyer::findOrder(int num_of_order)
-{ // finds a specific order and return true if the order exits, false if it doesn't
+{ // finds a specific order and return true if the order exits and already paid, false if it doesn't
 	for (int i = 0; i < this->b_order_size; i++)
 	{
 		if (this->b_order[i]->GetOrderNumber() == num_of_order)
 		{
-			return true;
+			if (this->b_order[i]->getPaymentSatus() == true)
+			{
+				return true;
+			}
 		}
 	}
 	return false;
@@ -142,7 +144,7 @@ void Buyer::AddOrderToOrderArr(Order * order)
 	}
 	else
 	{ // realloc
-		Order ** new_order_array = new Order *[this->b_order_size + 1];
+		Order ** new_order_array = new Order *[this->b_order_size];
 		int size = this->b_order_size;
 		for (int i = 0; i < size; i++)
 		{
@@ -151,7 +153,7 @@ void Buyer::AddOrderToOrderArr(Order * order)
 		delete[] this->b_order;
 		this->b_order = new_order_array;
 
-		this->b_order[this->b_order_size + 1] = order; //insert new order by ptr
+		this->b_order[this->b_order_size] = order; //insert new order by ptr
 		this->b_order_size++;
 	}
 
@@ -173,8 +175,7 @@ void Buyer::printBuyer()
 		cout << "- These are the products " << this->getName() <<" bought:" << endl;
 		for (int i = 0; i < this->b_order_size; i++)
 		{
-			cout << "order number: " << i << endl;
-			for (int j = 0; j < this->b_order[i]->getNumberOfProd(); i++)
+			for (int j = 0; j < this->b_order[i]->getNumberOfProd();j++)
 			{
 				cout << "- Product's Name : " << this->b_order[i]->GetProductsArray()[j]->getName() << endl;
 				cout << "- Product's Price : " << this->b_order[i]->GetProductsArray()[j]->getPrice() << endl;
@@ -184,6 +185,55 @@ void Buyer::printBuyer()
 		}
 	}
 	cout << "<----------------------------------------->" << endl;
+}
+//----------------------------------------------------------------------------------------//
+void Buyer::makeOrder()
+{
+	bool found = false;
+	int lastOrder = -1;
+	for (int i = 0; i < this->b_order_size && found ==false; i++)
+	{//find the last order the buyer didn't pay for
+		if (this->b_order[i]->getPaymentSatus() == false)
+		{
+			lastOrder = i;
+			found = true;
+		}
+	}
+	if (lastOrder == -1)
+	{ //all the orders have been paid, or no orders exist yet
+		cout << "You have no orders to pay for right now " << endl;
+		return;
+	}
+	int updatedCartSize = this->getCart().c_logicSize - this->GetOrderArray()[lastOrder]->getNumberOfProd();
+	if (updatedCartSize > 0)
+	{
+		Product ** new_arr = new Product *[updatedCartSize];
+		int pCounter = 0;
+		for (int i = 0; i < this->getCart().c_logicSize; i++)
+		{
+			for (int j = 0; j < this->b_order[lastOrder]->getNumberOfProd(); j++)
+			{
+				if (this->b_cart.c_prouductArr[i] != this->b_order[lastOrder]->GetProductsArray()[j])
+				{
+					new_arr[pCounter] = this->b_cart.c_prouductArr[i];
+					pCounter++;
+				}
+			}
+		}
+		delete[] this->b_cart.c_prouductArr;
+		this->b_cart.c_logicSize = updatedCartSize;
+		this->b_cart.c_phsize = updatedCartSize + 1;
+		this->b_cart.c_prouductArr = new_arr;
+		this->GetOrderArray()[lastOrder]->setPaymentSatus(true);
+	}
+	if (updatedCartSize <= 0)
+	{ // cart need initialization
+		delete[] this->b_cart.c_prouductArr;
+		this->b_cart.c_logicSize = 0;;
+		this->b_cart.c_phsize = 1;
+		this->b_cart.c_prouductArr = nullptr;
+		this->GetOrderArray()[lastOrder]->setPaymentSatus(true);
+	}
 }
 //----------------------------------------------------------------------------------------//
 

@@ -52,13 +52,14 @@ void Cart::SetProductArr(Product **Arr)
 {
 	this->c_prouductArr = Arr;
 }
+
 //---------------------------------------------------------------------------------------//
 void Cart::PrintCart()
 {
 	cout << "The items in the cart are:" << endl;
 	for (int i = 0; i < this->c_logicSize; i++)
 	{
-		cout << "Serial:" << this->c_prouductArr[i]->getSerial() << " " << "Category:" << this->c_prouductArr[i]->getCategory() << " " << "Name:" << this->c_prouductArr[i]->getName() << " " << "Price:" << this->c_prouductArr[i]->getPrice() << endl;
+		cout << "Serial:" << this->c_prouductArr[i]->getSerial() << " " << "Category:" << Product::ProductCategoryStr[this->c_prouductArr[i]->getCategory()] << " " << "Name:" << this->c_prouductArr[i]->getName() << " " << "Price:" << this->c_prouductArr[i]->getPrice() << endl;
 	}
 }
 //---------------------------------------------------------------------------------------//

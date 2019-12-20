@@ -40,6 +40,7 @@ public:
 	void AddOrderToOrderArr(Order * order);
 	int getOrderlogicsize() const;
 	void printBuyer();
+	void makeOrder();
 };
 
 #endif // __BUYER_H

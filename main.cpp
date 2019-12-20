@@ -38,7 +38,6 @@ void Menu(User & user)
 	while (menu != ExitMenu)
 	{
 		MenuOpertaion(menu, user);
-//		system("CLS");
 		PrintMenu();
 		cin >> menu;
 	}
@@ -62,7 +61,7 @@ void MenuOpertaion(int oper, User & user)
 		cin.getline(b_name, MAX_CHAR_INPUT);
 		while (user.checkName(b_name, 0) == true)
 		{
-			cout << "your username is already take. please enter another one:" << endl;
+			cout << "your username is already taken. please enter another one:" << endl;
 			cin.getline(b_name, MAX_CHAR_INPUT);
 		}
 		cout << "please enter your password: (at least 6 digits) " << endl;
@@ -99,7 +98,7 @@ void MenuOpertaion(int oper, User & user)
 		cin.getline(s_name, MAX_CHAR_INPUT);
 		while (user.checkName(s_name, 1) == true)
 		{
-			cout << "your username is already take. please enter another one:" << endl;
+			cout << "your username is already taken. please enter another one:" << endl;
 			cin.getline(s_name, MAX_CHAR_INPUT);
 		}
 		cout << "please enter your password: (at least 6 digits) " << endl;
@@ -128,7 +127,7 @@ void MenuOpertaion(int oper, User & user)
 		char name[MAX_CHAR_INPUT];
 		char pass[MAX_CHAR_INPUT];
 		cout << "Please Log in first to add a product" << endl;
-		cout << "Please enter your name: " << endl;
+		cout << "Hey Seller, Please enter your name: " << endl;
 		cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 		cin.getline(name, MAX_CHAR_INPUT);
 		cout << "Please enter your password: " << endl;
@@ -138,7 +137,7 @@ void MenuOpertaion(int oper, User & user)
 			while (user.approveLogIn(name, pass, 1) == 0)
 			{
 				int indicator;
-				cout << "Your input didn't match, press 0 to exit: " << endl;
+				cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
 				cin >> indicator;
 				if (indicator == 0)
 					exit(1);
@@ -192,7 +191,7 @@ void MenuOpertaion(int oper, User & user)
 	{
 		char name[MAX_CHAR_INPUT];
 		char pass[MAX_CHAR_INPUT];
-		cout << "Please Log in first to add a feedback" << endl;
+		cout << "Hey Buyer, Please Log in first to add a feedback" << endl;
 		cout << "Please enter your name: " << endl;
 		cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 		cin.getline(name, MAX_CHAR_INPUT);
@@ -203,7 +202,7 @@ void MenuOpertaion(int oper, User & user)
 			while (user.approveLogIn(name, pass, 0) == 0)
 			{
 				int indicator;
-				cout << "Your input didn't match, press 0 to exit: " << endl;
+				cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
 				cin >> indicator;
 				if (indicator == 0)
 					exit(1);
@@ -228,12 +227,12 @@ void MenuOpertaion(int oper, User & user)
 		cin.getline(sellerName, MAX_CHAR_INPUT);
 		cout << "Please enter the order number:" << endl;
 		cin >> orderNumber;
-		/*if (my_buyer->findOrder(orderNumber == 0))
-			{
-				cout << "We haven't found your'e order, returning to main menu" << endl;
-				break;
-			}*/
-			// find order and confirm the buyer bought from this seller, then send a ref for this seller
+		if (my_buyer->findOrder(orderNumber) == 0)
+		{
+			cout << "We haven't found your'e order or you didn't pay for it yet, returning to main menu" << endl;
+			break;
+		}
+		// find order and confirm the buyer bought from this seller, then send a ref for this seller
 		Seller * my_seller = user.findSeller(sellerName);
 		cout << "Please enter the day,month and year you made the order :" << endl;
 		cin >> purchaseDay;
@@ -251,7 +250,7 @@ void MenuOpertaion(int oper, User & user)
 	{// add product for buyer's cart
 		char name[MAX_CHAR_INPUT];
 		char pass[MAX_CHAR_INPUT];
-		cout << "Please Log in first to add a product" << endl;
+		cout << "Hey Buyer, Please Log in first to add a product" << endl;
 		cout << "Please enter your name: " << endl;
 		cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 		cin.getline(name, MAX_CHAR_INPUT);
@@ -262,7 +261,7 @@ void MenuOpertaion(int oper, User & user)
 			while (user.approveLogIn(name, pass, 0) == 0)
 			{
 				int indicator;
-				cout << "Your input didn't match, press 0 to exit: " << endl;
+				cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
 				cin >> indicator;
 				if (indicator == 0)
 					exit(1);
@@ -316,25 +315,19 @@ void MenuOpertaion(int oper, User & user)
 		cout << "Please enter the product's serial number you want to add to your cart: " << endl;
 		cin >> pSerial;
 		Seller * my_seller = user.findSeller(name);
-		if (my_seller == nullptr)
+		while (my_seller == nullptr)
 		{
-			while (my_seller == nullptr)
-			{
-				cout << "Are you sure? seller not found! try again" << endl;
-				cin.ignore(numeric_limits <streamsize> ::max(), '\n');
-				cin.getline(name, MAX_CHAR_INPUT);
-			}
+			cout << "Are you sure? seller not found! try again" << endl;		
+			cin.ignore(numeric_limits <streamsize> ::max(), '\n');
+			cin.getline(name, MAX_CHAR_INPUT);
 			my_seller = user.findSeller(name);
 		}
 		Product * my_product = my_seller->getCart().getProductBySerial(pSerial);
-		if (my_product == nullptr)
+		while (my_product == nullptr)
 		{
-			while (my_product == nullptr)
-			{
-				cout << "Are you sure? product not found! enter serial number again" << endl;
-				cin >> pSerial;
-				my_product = my_seller->getCart().getProductBySerial(pSerial);
-			}
+			cout << "Are you sure? product not found! enter serial number again" << endl;
+			cin >> pSerial;
+			my_product = my_seller->getCart().getProductBySerial(pSerial);
 		}
 		my_buyer->addToCart(my_product);
 	}break;
@@ -345,20 +338,23 @@ void MenuOpertaion(int oper, User & user)
 
 		char name[MAX_CHAR_INPUT];
 		char pass[MAX_CHAR_INPUT];
-		cout << "Hello buyer,please Log in first to make a order" << endl;
+		cout << "Hey Buyer, Please Log in first to add a product" << endl;
 		cout << "Please enter your name: " << endl;
 		cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 		cin.getline(name, MAX_CHAR_INPUT);
 		cout << "Please enter your password: " << endl;
 		cin.getline(pass, MAX_CHAR_INPUT);
-		while (user.approveLogIn(name, pass, 0) == 0)//not fount the user
-		{
-			cout << "Your input didn't match, please enter again:" << endl;
+		while (user.approveLogIn(name, pass, 0) == 0)
+		{	// couldn't find the requested user
+			int indicator;
+			cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+			cin >> indicator;
+			if (indicator == 0)
+				exit(1);
 			cout << "Please enter your name: " << endl;
 			cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 			cin.getline(name, MAX_CHAR_INPUT);
-			cout << "Please enter your password: " << endl;
-			cin.ignore(numeric_limits <streamsize> ::max(), '\n');
+			cout << "Please enter your password: (press 0 to exit) " << endl;
 			cin.getline(pass, MAX_CHAR_INPUT);
 		}
 		int countP = 0, counterArr = 0;
@@ -369,6 +365,11 @@ void MenuOpertaion(int oper, User & user)
 		my_buyer->getCart().PrintCart();
 		cout << "Please enter the number of the product that you going to buy:" << endl;
 		cin >> countP;
+		while (countP > my_buyer->getCart().GetLogicS())
+		{
+			cout << "You cant buy more products than you have in your cart, please enter again:" << endl;
+			cin >> countP;
+		}
 		Order order(countP);
 		if (countP == 0) 
 		{
@@ -377,22 +378,34 @@ void MenuOpertaion(int oper, User & user)
 		cout << "Please write the serial number of the product that you want to order:(if you want to stop adding press -1)" << endl;
 		cin >> serial;
 		Product *temp;
+		int orderTotalPrice = 0, counter = 0;
 		int logicArr = my_buyer->getCart().GetLogicS();//how many proudcts in the old cart
-		while (serial != -1)
+		while (serial != -1 && counter < countP)
 		{
 			for (int i = 0; i < logicArr; i++)
 			{
 				if ((my_buyer->getCart().getProductArr())[i]->getSerial() == serial)
 				{
 					temp = ((my_buyer->getCart().getProductArr())[i]);
-					order.GetProductsArray()[counterArr] = temp;
-					counterArr++;
+					if (order.checkQuantity(temp) == false)
+					{
+						order.GetProductsArray()[counterArr] = temp;
+						orderTotalPrice += order.GetProductsArray()[counterArr]->getPrice();
+						counterArr++;
+						counter++;
+					}
 				}
 			}
-			cout << "Please write the serial number of the product that you want to order:(if you want to stop adding prees -1:)" << endl;
+			cout << "Please write the serial number of the product that you want to order:(if you want to stop adding press -1:)" << endl;
 			cin >> serial;
+			while (serial == -1 && countP > counterArr)
+			{
+				cout << "You didn't choose " << countP << " products yet! enter serial number again: " << endl;
+				cin >> serial;
+			}
 		}
 		order.setNumberOfProd(counterArr);
+		order.SetPrice(orderTotalPrice);
 		my_buyer->AddOrderToOrderArr(&order);
 		cout << "that is your cart:" << endl;
 		for (int i = 0; i < countP; i++)
@@ -401,7 +414,6 @@ void MenuOpertaion(int oper, User & user)
 			cout << "- Product's Name : " << order.GetProductsArray()[i]->getName() << endl;
 			cout << "- Product's Price : " << order.GetProductsArray()[i]->getPrice() << endl;
 			cout << "- Product's serial number : " << order.GetProductsArray()[i]->getSerial() << endl;
-
 		}
 		cout << "<----------------------------------------->" << endl;
 		cout << "Total cart cost:-" << order.GetPriceOfOrder() << "- shekel's" << endl;
@@ -410,76 +422,37 @@ void MenuOpertaion(int oper, User & user)
 	case 7:
 	{
 		//payment for order:
-		int input, temp, serialnumber;
+		int confirm;
 		char name[MAX_CHAR_INPUT];
 		char pass[MAX_CHAR_INPUT];
-		cout << "Hello buyer,please Log in first to make a order" << endl;
+		cout << "Hey Buyer, Please Log in first to add a product" << endl;
 		cout << "Please enter your name: " << endl;
 		cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 		cin.getline(name, MAX_CHAR_INPUT);
 		cout << "Please enter your password: " << endl;
 		cin.getline(pass, MAX_CHAR_INPUT);
-		while (user.approveLogIn(name, pass, 0) == 0)//not fount the user
-		{
-			cout << "Your input didn't match, please enter again:" << endl;
+		while (user.approveLogIn(name, pass, 0) == 0)
+		{	// couldn't find the requested user
+			int indicator;
+			cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+			cin >> indicator;
+			if (indicator == 0)
+				exit(1);
 			cout << "Please enter your name: " << endl;
 			cin.ignore(numeric_limits <streamsize> ::max(), '\n');
 			cin.getline(name, MAX_CHAR_INPUT);
-			cout << "Please enter your password: " << endl;
-			cin.ignore(numeric_limits <streamsize> ::max(), '\n');
+			cout << "Please enter your password: (press 0 to exit) " << endl;
 			cin.getline(pass, MAX_CHAR_INPUT);
 		}
 		Buyer *my_buyer = (user.findBuyer(name));
-		int lastorder = my_buyer->getOrderlogicsize();//size of the  order array size
-		int numberofProducts = (my_buyer->GetOrderArray()[lastorder])->getNumberOfProd();
 		cout << "Welcome, " << my_buyer->getName() << endl;
-		cout << "We understand that you want to pay for your final cart:" << endl;
-		for (int i = 0; i < numberofProducts; i++)
+		cout << "Please press 1 to confirm your'e purchase, if you still neeed more time, press 0" << endl;
+		cin >> confirm;
+		if (confirm == 0)
+			break;
+		else if (confirm == 1)
 		{
-			cout << "Product name: " << *(my_buyer->GetOrderArray()[lastorder])->GetProductsArray()[i]->getName() <<
-				"Product Serial: " << (my_buyer->GetOrderArray()[lastorder])->GetProductsArray()[i]->getSerial() << "Prouct Price: "
-				<< (my_buyer->GetOrderArray()[lastorder])->GetProductsArray()[i]->getPrice() << endl;// *(my_buyer.GetOrderArray()[lastorder])->GetProductsArray()[i]->getPrice() << endl;
-		}
-		cout << "The total price of your cart is:" << my_buyer->GetOrderArray()[lastorder]->GetPriceOfOrder() << endl;
-		cout << "if you sure you want to buy press 1 if you dont want press 0";
-		cin >> input;
-		if (input == 0)
-		{
-			//temp = my_buyer.GetOrderArray()[lastorder]->getNumberofOrder();
-			//my_buyer.GetOrderArray()[lastorder]->SetNumberofOrder(temp-1);
-			delete[] my_buyer->GetOrderArray()[lastorder];
-		}
-		if (input == 1)
-		{
-			int logicOrder, logicCart, serialOrder, serialCart;
-			Order Lastorder;
-			Product **order;
-			Product **cart;
-			cart = my_buyer->getCart().getProductArr();
-			order = (my_buyer->GetOrderArray()[lastorder])->GetProductsArray();
-			logicOrder = my_buyer->GetOrderArray()[lastorder]->getNumberOfProd();
-			logicCart = my_buyer->getCart().GetLogicS();
-			for (int i = 0; i < logicCart; i++)
-			{
-				for (int j = 0; j < logicOrder; i++)
-				{
-					serialCart = my_buyer->getCart().getProductArr()[i]->getSerial();//serial in the cart in the place i
-					serialOrder = my_buyer->GetOrderArray()[lastorder]->GetProductsArray()[j]->getSerial();
-					if (serialCart == serialOrder)
-						delete[] my_buyer->getCart().getProductArr()[i];
-				}
-			}
-			int counter = 0;
-			for (int i = 0; i < logicCart - 1; i++)
-			{
-				if (my_buyer->getCart().getProductArr()[i] == nullptr)
-				{
-					my_buyer->getCart().getProductArr()[i] = my_buyer->getCart().getProductArr()[i + 1];
-					counter++;//to know how many proudct deleted
-				}
-			}
-			my_buyer->getCart().SetLogicS(logicCart - counter);
-			cout << "Thank you for your pruch,enjoy!" << endl;
+			my_buyer->makeOrder();
 		}
 	}break;
 	case 8:
