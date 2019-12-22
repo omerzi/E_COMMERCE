@@ -52,6 +52,32 @@ void Cart::SetProductArr(Product **Arr)
 {
 	this->c_prouductArr = Arr;
 }
+//---------------------------------------------------------------------------------------//
+void Cart::addToCart(Product * prod)
+{
+	if (this->c_prouductArr == nullptr || this->c_logicSize == 0)
+	{//empty arr
+		this->c_prouductArr = new Product *[this->c_phsize];
+		this->c_prouductArr[this->c_logicSize] = new Product(*prod);
+		this->c_logicSize++;
+	}
+	else
+	{ // realloc
+		if (this->c_logicSize == this->c_phsize)
+		{
+			this->c_phsize *= 2;
+			Product ** new_prod_array = new Product *[this->c_phsize];
+			for (int i = 0; i < this->c_logicSize; i++)
+			{
+				new_prod_array[i] = this->c_prouductArr[i];
+			}
+			delete[] this->c_prouductArr;
+			this->c_prouductArr = new_prod_array;
+		}
+		this->c_prouductArr[this->c_logicSize] = new Product(*prod); //insert new product by ptr
+		this->c_logicSize++;
+	}
+}
 
 //---------------------------------------------------------------------------------------//
 void Cart::PrintCart()

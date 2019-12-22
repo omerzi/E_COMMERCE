@@ -11,7 +11,7 @@ class Seller
 public:
 	static constexpr int MAX_ARR_SIZE = 256;
 private :
-	Feedback **	s_feedArr; // לעדכן הכל
+	Feedback **	s_feedArr;  
 	Address	    s_address;
 	Cart		s_cart;
 	int			s_feed_lsize = 0;
@@ -35,7 +35,6 @@ public:
 	Cart & getCart();
 	const char * getPassword() const;
 	void addFeedback(Feedback * feed);
-	void addProductToSeller(Product * newP);
 	void printSeller();
 };
 

@@ -6,9 +6,6 @@ class Product;
 class Cart
 {
 public:
-	friend class Buyer;
-	friend class Seller;
-public:
 	Cart();
 	Cart(const Cart&other);
 	~Cart();
@@ -22,6 +19,8 @@ public:
 	void PrintCartByProductName(char * pName);
 	Product* getProductBySerial(int serial);
 	void SetProductArr(Product **Arr);
+	void addToCart(Product * product);
+
 private:
 	int c_logicSize;
 	int c_phsize;

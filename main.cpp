@@ -7,6 +7,10 @@ void Menu(User & user);
 void MenuOpertaion(int oper, User & user);
 static const int MAX_CHAR_INPUT = 30;
 static const int MAX_DESCRIPTION_SIZE = 256;
+/* Omer Zidkoni 316498294 
+	Naor Pashay 313524886
+	Class A Keren Kalif sunday 10:15
+*/
 int main()
 {
 	User A;
@@ -137,7 +141,7 @@ void MenuOpertaion(int oper, User & user)
 			while (user.approveLogIn(name, pass, 1) == 0)
 			{
 				int indicator;
-				cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+				cout << "Your input didn't match, press 0 to exit:(press 1 to continue) " << endl;
 				cin >> indicator;
 				if (indicator == 0)
 					exit(1);
@@ -168,22 +172,26 @@ void MenuOpertaion(int oper, User & user)
 		if (strcmp(pCategory, "KIDS") == 0)
 		{
 			Product my_product(Product::KIDS, pName, pPrice);
-			my_seller->addProductToSeller(&my_product);
+			my_product.setSeller(my_seller);
+			my_seller->getCart().addToCart(&my_product);
 		}
 		else if (strcmp(pCategory, "OFFICE") == 0)
 		{
 			Product my_product(Product::OFFICE, pName, pPrice);
-			my_seller->addProductToSeller(&my_product);
+			my_product.setSeller(my_seller);
+			my_seller->getCart().addToCart(&my_product);
 		}
 		else if (strcmp(pCategory, "CLOTHES") == 0)
 		{
 			Product my_product(Product::CLOTHES, pName, pPrice);
-			my_seller->addProductToSeller(&my_product);
+			my_product.setSeller(my_seller);
+			my_seller->getCart().addToCart(&my_product);
 		}
 		else if (strcmp(pCategory, "ELECTRONICS") == 0)
 		{
 			Product my_product(Product::ELECTRONICS, pName, pPrice);
-			my_seller->addProductToSeller(&my_product);
+			my_product.setSeller(my_seller);
+			my_seller->getCart().addToCart(&my_product);
 		}
 	}break;//Add a product for seller
 		   //----------------------------------------------------------------------------------------//
@@ -202,7 +210,7 @@ void MenuOpertaion(int oper, User & user)
 			while (user.approveLogIn(name, pass, 0) == 0)
 			{
 				int indicator;
-				cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+				cout << "Your input didn't match, press 0 to exit:(press 1 to continue) " << endl;
 				cin >> indicator;
 				if (indicator == 0)
 					exit(1);
@@ -261,7 +269,7 @@ void MenuOpertaion(int oper, User & user)
 			while (user.approveLogIn(name, pass, 0) == 0)
 			{
 				int indicator;
-				cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+				cout << "Your input didn't match, press 0 to exit:(press 1 to continue) " << endl;
 				cin >> indicator;
 				if (indicator == 0)
 					exit(1);
@@ -329,7 +337,7 @@ void MenuOpertaion(int oper, User & user)
 			cin >> pSerial;
 			my_product = my_seller->getCart().getProductBySerial(pSerial);
 		}
-		my_buyer->addToCart(my_product);
+		my_buyer->getCart().addToCart(my_product);
 	}break;
 	//----------------------------------------------------------------------------------------//
 	case 6:
@@ -434,7 +442,7 @@ void MenuOpertaion(int oper, User & user)
 		while (user.approveLogIn(name, pass, 0) == 0)
 		{	// couldn't find the requested user
 			int indicator;
-			cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+			cout << "Your input didn't match, press 0 to exit:(press 1 to continue) " << endl;
 			cin >> indicator;
 			if (indicator == 0)
 				exit(1);
@@ -446,7 +454,7 @@ void MenuOpertaion(int oper, User & user)
 		}
 		Buyer *my_buyer = (user.findBuyer(name));
 		cout << "Welcome, " << my_buyer->getName() << endl;
-		cout << "Please press 1 to confirm your'e purchase, if you still neeed more time, press 0" << endl;
+		cout << "Please press 1 to confirm your'e purchase, if you still need more time, press 0" << endl;
 		cin >> confirm;
 		if (confirm == 0)
 			break;
@@ -476,5 +484,6 @@ void MenuOpertaion(int oper, User & user)
 			user.GetSellerAddress()[i]->getCart().PrintCartByProductName(pName);
 		}
 	}
+	default: break;
 	}
 }

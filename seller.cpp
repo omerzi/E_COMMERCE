@@ -115,34 +115,6 @@ Cart & Seller::getCart()
 	return s_cart;
 }
 //----------------------------------------------------------------------------------------//
-void Seller::addProductToSeller(Product * newP)
-{
-	if (this->s_cart.c_prouductArr == nullptr)
-	{//empty arr
-		this->s_cart.c_prouductArr = new Product *[this->s_cart.c_phsize];
-		this->s_cart.c_prouductArr[this->s_cart.c_logicSize] = new Product(*newP);
-		this->s_cart.c_prouductArr[this->s_cart.c_logicSize]->setSeller(this);
-		this->s_cart.c_logicSize++;
-	}
-	else
-	{ // realloc
-		if (this->s_cart.c_logicSize == this->s_cart.c_phsize)
-		{
-			this->s_cart.c_phsize *= 2;
-			Product ** new_prod_array = new Product *[this->s_cart.c_phsize];
-			for (int i = 0; i < this->s_cart.c_logicSize; i++)
-			{
-				new_prod_array[i] = this->s_cart.c_prouductArr[i];
-			}
-			delete[] this->s_cart.c_prouductArr;
-			this->s_cart.c_prouductArr = new_prod_array;
-		}
-		this->s_cart.c_prouductArr[this->s_cart.c_logicSize] = new Product(*newP); //insert new product by ptr
-		this->s_cart.c_prouductArr[this->s_cart.c_logicSize]->setSeller(this);
-		this->s_cart.c_logicSize++;
-	}
-}
-//----------------------------------------------------------------------------------------//
 void Seller::printSeller()
 {
 	cout << "- Seller's Name : " << this->getName() << endl;
@@ -160,7 +132,7 @@ void Seller::printSeller()
 			cout << "<----------------------------------------->" << endl;
 		}
 	}
-	if (this->s_cart.c_logicSize == 0)
+	if (this->s_cart.GetLogicS() == 0)
 	{
 		cout << "- " << this->getName() << " doesn't have any products right now" << endl;
 		cout << "<----------------------------------------->" << endl;
@@ -168,11 +140,11 @@ void Seller::printSeller()
 	else
 	{
 		cout << "These are" << this->getName() << " products:" << endl;
-		for (int i = 0; i < this->s_cart.c_logicSize; i++)
+		for (int i = 0; i < this->s_cart.GetLogicS(); i++)
 		{
-			cout << "- Product's Name : " << this->s_cart.c_prouductArr[i]->getName() << endl;
-			cout << "- Product's Price : " << this->s_cart.c_prouductArr[i]->getPrice() << endl;
-			cout << "- Product's serial number : " << this->s_cart.c_prouductArr[i]->getSerial() << endl;
+			cout << "- Product's Name : " << this->s_cart.getProductArr()[i]->getName() << endl;
+			cout << "- Product's Price : " << this->s_cart.getProductArr()[i]->getPrice() << endl;
+			cout << "- Product's serial number : " << this->s_cart.getProductArr()[i]->getSerial() << endl;
 			cout << "<----------------------------------------->" << endl;
 		}
 	}
