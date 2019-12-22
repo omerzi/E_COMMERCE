@@ -355,7 +355,7 @@ void MenuOpertaion(int oper, User & user)
 		while (user.approveLogIn(name, pass, 0) == 0)
 		{	// couldn't find the requested user
 			int indicator;
-			cout << "Your input didn't match, press 0 to exit:(press anything else to continue) " << endl;
+			cout << "Your input didn't match, press 0 to exit:(press 1 to continue) " << endl;
 			cin >> indicator;
 			if (indicator == 0)
 				exit(1);
@@ -431,7 +431,7 @@ void MenuOpertaion(int oper, User & user)
 		order.setNumberOfProd(counterArr);
 		order.SetPrice(orderTotalPrice);
 		my_buyer->AddOrderToOrderArr(&order);
-		cout << "that is your cart:" << endl;
+		cout << "that is your order:" << endl;
 		for (int i = 0; i < countP; i++)
 		{
 			cout << "<----------------------------------------->" << endl;

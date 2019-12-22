@@ -11,7 +11,7 @@ public:
 	~Cart();
 	const int GetLogicS() const;
 	const int GetPhiS() const;
-	Product ** getProductArr() const;
+	Product ** getProductArr();
 	void SetLogicS(int logic);
 	void SetPhiS(int phis);
 	void PrintCart();

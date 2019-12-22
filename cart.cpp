@@ -18,6 +18,7 @@ Cart::Cart(const Cart & other)
 //---------------------------------------------------------------------------------------//
 Cart::~Cart()
 {
+	cout << "cart d'tor" << endl;
 	for (int i = 0; i < this->c_logicSize; i++)
 		delete this->c_prouductArr[i];
 	delete[] c_prouductArr;
@@ -43,7 +44,7 @@ void Cart::SetPhiS(int phisc)
 	this->c_phsize = phisc;
 }
 //---------------------------------------------------------------------------------------//
-Product ** Cart::getProductArr() const
+Product ** Cart::getProductArr() 
 {
 	return c_prouductArr;
 }

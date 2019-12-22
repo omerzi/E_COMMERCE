@@ -121,7 +121,7 @@ void Buyer::AddOrderToOrderArr(Order * order)
 	}
 	else
 	{ // realloc
-		Order ** new_order_array = new Order *[this->b_order_size];
+		Order ** new_order_array = new Order *[this->b_order_size+1];
 		int size = this->b_order_size;
 		for (int i = 0; i < size; i++)
 		{
@@ -129,8 +129,7 @@ void Buyer::AddOrderToOrderArr(Order * order)
 		}
 		delete[] this->b_order;
 		this->b_order = new_order_array;
-
-		this->b_order[this->b_order_size] = order; //insert new order by ptr
+		this->b_order[this->b_order_size] = new Order(*order); //insert new order by ptr
 		this->b_order_size++;
 	}
 
@@ -168,7 +167,7 @@ void Buyer::makeOrder()
 {
 	bool found = false;
 	int lastOrder = -1;
-	for (int i = 0; i < this->b_order_size && found ==false; i++)
+	for (int i = 0; i < this->b_order_size && found == false; i++)
 	{//find the last order the buyer didn't pay for
 		if (this->b_order[i]->getPaymentSatus() == false)
 		{
@@ -182,32 +181,49 @@ void Buyer::makeOrder()
 		return;
 	}
 	int updatedCartSize = this->b_cart.GetLogicS() - this->GetOrderArray()[lastOrder]->getNumberOfProd();
-	if (updatedCartSize > 0)
+	int lastIndex = -1;
+	bool flag = false;
+
+	for (int i = 0; i < this->b_cart.GetLogicS(); i++)
 	{
-		Product ** new_arr = new Product *[updatedCartSize];
-		int pCounter = 0;
-		for (int i = 0; i <this->b_order[lastOrder]->getNumberOfProd(); i++)
+		for (int j = 0; j < this->b_order[lastOrder]->getNumberOfProd() && flag == false; j++)
 		{
-			bool flag = false;
-			for (int j = 0; j <  this->b_cart.GetLogicS() && flag == false; j++)
+			if (this->b_cart.getProductArr()[i] == this->b_order[lastOrder]->GetProductsArray()[j])
 			{
-				if (this->b_cart.getProductArr()[j] != this->b_order[lastOrder]->GetProductsArray()[i])
+				this->b_cart.getProductArr()[i] = nullptr;
+				flag = true;
+			}
+		}
+		flag = false;
+	}
+	if (updatedCartSize != 0)
+	{
+		for (int i = 0; i < this->b_cart.GetLogicS(); i++)
+		{
+			if (this->b_cart.getProductArr()[i] == nullptr)
+			{
+				flag = false;
+				for (int j = i + 1; j < this->b_cart.GetLogicS() && flag == false; j++)
 				{
-					new_arr[pCounter] = this->b_cart.getProductArr()[j];
-					pCounter++;
-					flag = true;
+					if (this->b_cart.getProductArr()[j] != nullptr)
+					{
+						this->b_cart.getProductArr()[i] = this->b_cart.getProductArr()[j];
+						this->b_cart.getProductArr()[j] = nullptr;
+						flag = true;
+					}
 				}
 			}
 		}
-		delete[] this->b_cart.getProductArr();
+	}
+	if (updatedCartSize > 0)
+	{
+
 		this->b_cart.SetLogicS(updatedCartSize);
 		this->b_cart.SetPhiS(updatedCartSize);
-		this->b_cart.SetProductArr(new_arr);
 		this->GetOrderArray()[lastOrder]->setPaymentSatus(true);
 	}
 	if (updatedCartSize <= 0)
 	{ // cart need initialization
-		delete[] this->b_cart.getProductArr();
 		this->b_cart.SetLogicS(0);
 		this->b_cart.SetPhiS(1);
 		this->b_cart.SetProductArr(nullptr);

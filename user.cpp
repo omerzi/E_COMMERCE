@@ -14,11 +14,12 @@ User::User()
 User::~User()
 {
 	for (int i = 0; i < this->b_logicSizeArr; i++)
-		delete this->b_arr[i];
+		delete this->b_arr[i];  // Known Issues
 	for (int i = 0; i < this->s_logicSizeArr; i++)
 		delete this->s_arr[i];
-	delete[] this->b_arr;
 	delete[] this->s_arr;
+	delete[] this->b_arr;
+
 }
 //----------------------------------------------------------------------------------------//
 Buyer** User::GetBuyerAddress() const
