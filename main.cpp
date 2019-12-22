@@ -369,6 +369,12 @@ void MenuOpertaion(int oper, User & user)
 		int serial;
 		Buyer *my_buyer = (user.findBuyer(name));
 		cout << "Welcome, " << my_buyer->getName() << endl;
+		//check all orders has been paid already:
+		if (my_buyer->GetOrderArray()[my_buyer->getOrderlogicsize()]->getPaymentSatus() == false) // didn't pay for his last order
+		{
+			cout << "Please pay for your last order first!" << endl;
+			break;
+		}
 		cout << "This is your current cart:" << endl;
 		my_buyer->getCart().PrintCart();
 		cout << "Please enter the number of the product that you going to buy:" << endl;
