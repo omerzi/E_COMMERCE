@@ -369,11 +369,20 @@ void MenuOpertaion(int oper, User & user)
 		int serial;
 		Buyer *my_buyer = (user.findBuyer(name));
 		cout << "Welcome, " << my_buyer->getName() << endl;
-		//check all orders has been paid already:
-		if (my_buyer->GetOrderArray()[my_buyer->getOrderlogicsize()]->getPaymentSatus() == false) // didn't pay for his last order
+		//check cart is not empty
+		if (my_buyer->getCart().GetLogicS() == 0)
 		{
-			cout << "Please pay for your last order first!" << endl;
+			cout << "Please add products to cart first" << endl;
 			break;
+		}
+		//check all orders has been paid already:
+		if (my_buyer->getOrderlogicsize() != 0)
+		{
+			if (my_buyer->GetOrderArray()[my_buyer->getOrderlogicsize()-1]->getPaymentSatus() == false) // didn't pay for his last order
+			{
+				cout << "Please pay for your last order first!" << endl;
+				break;
+			}
 		}
 		cout << "This is your current cart:" << endl;
 		my_buyer->getCart().PrintCart();
@@ -418,6 +427,7 @@ void MenuOpertaion(int oper, User & user)
 				cin >> serial;
 			}
 		}
+		
 		order.setNumberOfProd(counterArr);
 		order.SetPrice(orderTotalPrice);
 		my_buyer->AddOrderToOrderArr(&order);
