@@ -2,43 +2,37 @@
 #define __BUYER_H
 #include <iostream>
 #include <string.h>
+#include <vector>
 #include "address.h"
 #include "cart.h"
 #include "order.h"
+#include "users.h"
+
 using namespace std;
 #pragma warning(disable: 4996)
-class Buyer
+class Buyer : virtual public Users
 {
-private:
-
-	char *		b_name;
-	Address		b_address;
-	char  *		b_password;
-	Cart		b_cart;
-	Order**		b_order;
-	int			b_order_size;
+protected:
+	Cart					b_cart;
+	vector <Order *>		b_order;
 public:
 	Buyer() = default; // default c'tor
-	Buyer(const char * name, const char * password, Address & address, Cart & cart); //main c'tor//
-	Buyer(const Buyer & other); //copy c'tor
-	Buyer(Buyer && other);//move c'tor!
-	~Buyer();//d'tor
-
+	Buyer(const string & name, const string & password, Address & address); //main c'tor//
+	Buyer(ifstream &in) :Users(in) {};
+	virtual ~Buyer();//d'tor
 public:
-	static const int MIN_PASSWORD_SIZE = 6;
-	void setName(const char * name);
-	void setAddress(Address  address);
-	bool setPassword(const char * password);
-	const char * getName() const;
-	const Address getAddress() const;
-	const char * getPassword() const;
+	virtual const Buyer& operator=(const Buyer& other);
+	virtual const Buyer& operator=(Buyer&& other);
+	friend ostream& operator<<(ostream & os, Buyer & buyer);
+	const Buyer & operator>(Buyer & other1);
+public:
+
 	Cart & getCart();
 	bool findOrder(int num_of_order);
-	Order ** GetOrderArray() const;
+	vector <Order *> GetOrderArray() const;
 	void SetOrderLogicSize(const int size);
 	void AddOrderToOrderArr(Order * order);
 	int getOrderlogicsize() const;
-	void printBuyer();
 	void makeOrder();
 };
 

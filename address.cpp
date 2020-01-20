@@ -1,58 +1,56 @@
 #include "address.h"
 #include <string.h>
 #pragma warning(disable: 4996)
-Address::Address(char  *city,char* state,char * street)
+Address::Address(const string & city, const string & state, const string & street)
 {
 	setState(state);
 	setCity(city);
 	setStreet(street);
 }
+
 //----------------------------------------------------------------------------------------//
-Address::~Address()
-{
-	delete[] this->a_city;
-	delete[] this->a_state;
-	delete[] this->a_street;
-}
-//----------------------------------------------------------------------------------------//
-Address::Address(const Address & other) //copy c'tor
-{
-	setCity(other.a_city);
-	setState(other.a_state);
-	setStreet(other.a_street);
-}
-//----------------------------------------------------------------------------------------//
-const char * Address::getStreet() const
+const string & Address::getStreet() const
 {
 	return this->a_street;
 }
 //----------------------------------------------------------------------------------------//
-const char * Address::getState()const
+const string & Address::getState()const
 {
 	return this->a_state;
 }
 //----------------------------------------------------------------------------------------//
-const char * Address::getCity()const
+const string & Address::getCity()const
 {
 	return this->a_city;
 }
 //----------------------------------------------------------------------------------------//
- void Address::setCity (const char* city)
+ void Address::setCity (const string & city)
 {
-	 this->a_city = strdup(city);
+	 this->a_city = city;
 }
  //----------------------------------------------------------------------------------------//
- void Address::setState(const char * state)
+ void Address::setState(const string & state)
  {
-	 this->a_state = strdup(state);
+	 this->a_state = state;
 
  }
  //----------------------------------------------------------------------------------------//
- void Address::setStreet(const char * street)
+ void Address::setStreet(const string & street)
  {
-	 this->a_street = strdup(street);
+	 this->a_street = street;
  }
  //----------------------------------------------------------------------------------------//
 
-
-
+ ostream & operator<<(ostream & os, Address & ad)
+ {
+	
+	 if (typeid(out) == typeid(ofstream))
+		 out << ad.a_state << " " << ad.a_city << " " << ad.a_street;
+	 else //(typeid(out)==typeid(ostream)
+	 {
+		 out << "State: " << ad.a_state;
+		 out << " City " << ad.a_city;
+		 out << " Street: " << ad.a_street;
+	 }
+		 return out;
+ }
